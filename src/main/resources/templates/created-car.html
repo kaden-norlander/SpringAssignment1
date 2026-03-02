@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Car Created Successfully</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+      background-color: #f8f9fa;
+      color: #333;
+    }
+    .success-container {
+      background-color: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      max-width: 500px;
+      border-left: 5px solid #2ecc71; /* Green success accent */
+    }
+    h1 {
+      color: #27ae60;
+      margin-top: 0;
+    }
+    .car-details {
+      margin: 1.5rem 0;
+      line-height: 1.6;
+    }
+    .label {
+      font-weight: bold;
+      color: #555;
+      display: inline-block;
+      width: 80px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 10px 15px;
+      background-color: #3498db;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      margin-top: 1rem;
+    }
+    .btn:hover {
+      background-color: #2980b9;
+    }
+  </style>
+</head>
+<body>
+
+<div class="success-container">
+  <h1>Success!</h1>
+  <p>Your new car has been added to the system.</p>
+
+  <div class="car-details">
+    <div><span class="label">ID:</span> <span th:text="${newCar.vinid}">101</span></div>
+    <div><span class="label">Make:</span> <span th:text="${newCar.make}">Honda</span></div>
+    <div><span class="label">Model:</span> <span th:text="${newCar.model}">civic</span></div>
+  </div>
+
+  <a href="/" class="btn">Return Home</a>
+</div>
+
+</body>
+</html>

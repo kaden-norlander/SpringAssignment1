@@ -1,54 +1,87 @@
 package com.example.spring1.api.controller;
-import com.example.spring1.api.models.Car;
-import com.example.spring1.api.repository.CarRepository;
-import org.springframework.http.ResponseEntity;
+import com.example.spring1.api.dto.CarDTO;
+import com.example.spring1.api.entity.Car;
+import com.example.spring1.api.service.CarService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 import java.util.Optional;
 
-
-@RestController
+@Controller
 @RequestMapping("/api/cars")
 public class CarController {
 
-    private final CarRepository repository;
+    private final CarService carService;
 
-    public CarController(CarRepository repository) {
-        this.repository = repository;
+    public CarController(CarService carService) {
+        this.carService = carService;
     }
 
-    @GetMapping
-    public Iterable<Car> getAllCars() {
-        return repository.findAll();
+    @GetMapping("/all")
+    public String getAllCars(Model model) {
+        List<CarDTO> cars = carService.getAllCars();
+
+        if (!cars.isEmpty()) {
+            model.addAttribute("cars", cars);
+            return "all-cars";
+        } else {
+            return "error/404";
+        }
     }
 
-    @PostMapping
-    public Car createCar(@RequestBody Car car) {
-        return repository.save(car);
+    @PostMapping("/create-car")
+    public String createCar(@ModelAttribute Car car,
+                            @RequestParam(required = false) Long dealerId,
+                            Model model) {
+
+        CarDTO newCarDto = carService.createCar(car, dealerId);
+
+        if (newCarDto != null) {
+            if (dealerId != null) {
+                return "redirect:/api/dealerships/" + dealerId;
+            }
+
+            model.addAttribute("newCar", newCarDto);
+            return "created-car";
+        } else {
+            return "error/404";
+        }
     }
 
     @GetMapping("/{vinid}")
-    public ResponseEntity<Car> getCarByVinid(@PathVariable Long vinid) {
-        Optional<Car> car = repository.findById(vinid);
-        return car.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
+    public String getCarByVinid(@PathVariable Long vinid, Model model) {
+        Optional<CarDTO> carDTO = carService.getCarByVinid(vinid);
 
-    @PutMapping("/{vinid}")
-    public ResponseEntity<Car> updateCar(@PathVariable Long vinid, @RequestBody Car carDetails) {
-        return repository.findById(vinid).map(car -> {
-            car.setMake(carDetails.getMake());
-            car.setColor(carDetails.getColor());
-            Car updatedCar = repository.save(car);
-            return ResponseEntity.ok(updatedCar);
-        }).orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    @DeleteMapping("/{vinid}")
-    public ResponseEntity<Void> deleteCar(@PathVariable Long vinid) {
-        if(repository.existsById(vinid)) {
-            repository.deleteById(vinid);
-            return ResponseEntity.ok().build();
+        if (carDTO.isPresent()) {
+            model.addAttribute("car", carDTO.get());
+            return "car-details";
+        } else {
+            return "error/404";
         }
-        return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping("/{vinid}/update")
+    public String updateCar(@PathVariable Long vinid, String make, String model, String color) {
+        boolean updated = carService.updateCar(vinid, make, model, color);
+
+        if (updated) {
+            return "redirect:/";
+        } else {
+            return "error/404";
+        }
+    }
+
+    @PostMapping("/{vinid}/delete")
+    public String deleteCar(@PathVariable Long vinid, Model model) {
+        Optional<CarDTO> deletedCar = carService.deleteCar(vinid);
+
+        if (deletedCar.isPresent()) {
+            model.addAttribute("deletedCar", deletedCar.get());
+            return "deleted-confirmation";
+        } else {
+            return "error/404";
+        }
     }
 }

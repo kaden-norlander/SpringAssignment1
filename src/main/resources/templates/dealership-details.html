@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dealership Inventory</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; background-color: #f8f9fa; color: #333; }
+    .header-card { background: #fff; padding: 2rem; border-radius: 8px; border-top: 5px solid #2980b9; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 2rem; }
+    .inventory-section { background: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    h1 { margin-top: 0; color: #2c3e50; }
+    h2 { color: #34495e; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+    th { background-color: #34495e; color: white; }
+    .btn { display: inline-block; padding: 8px 15px; background-color: #3498db; color: white; text-decoration: none; border: none; border-radius: 4px; cursor: pointer; }
+    .btn:hover { background-color: #2980b9; }
+    .btn-danger { background-color: #e74c3c; }
+    .btn-danger:hover { background-color: #c0392b; }
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; font-weight: bold; margin-bottom: .5rem; }
+    .form-group input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; max-width: 400px; }
+  </style>
+</head>
+<body>
+
+<div class="header-card">
+  <h1><span th:text="${dealership.name}">Bob's Autos</span></h1>
+  <p><strong>Location:</strong> <span th:text="${dealership.location}">Chicago, IL</span></p>
+  <p><strong>Manufacturer:</strong> <span th:text="${dealership.manufacturerName != null ? dealership.manufacturerName : 'Independent'}">Ford</span></p>
+  <a href="/api/dealerships/all" class="btn" style="background-color: #95a5a6;">Back to All Dealerships</a>
+</div>
+
+<div class="inventory-section">
+  <h2>Current Inventory</h2>
+
+  <div th:if="${#lists.isEmpty(dealership.cars)}">
+    <p style="color: #7f8c8d;">No cars are currently assigned to this dealership.</p>
+  </div>
+
+  <table th:unless="${#lists.isEmpty(dealership.cars)}">
+    <thead>
+    <tr>
+      <th>VIN ID</th>
+      <th>Make</th>
+      <th>Model</th>
+      <th>Color</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="car : ${dealership.cars}">
+      <td th:text="${car.vinid}">123</td>
+      <td th:text="${car.make}">Toyota</td>
+      <td th:text="${car.model}">Camry</td>
+      <td th:text="${car.color}">Blue</td>
+      <td>
+        <a th:href="@{/api/cars/{id}(id=${car.vinid})}" class="btn">View / Edit</a>
+
+        <form th:action="@{/api/cars/{id}/delete(id=${car.vinid})}" method="POST" style="display:inline;">
+          <button type="submit" class="btn btn-danger" onclick="return confirm('Delete this car?');">Delete</button>
+        </form>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <h3 style="margin-top: 2rem;">Add New Car to Inventory</h3>
+
+  <form action="/api/cars/create-car" method="POST">
+    <input type="hidden" name="dealerId" th:value="${dealership.dealershipId}">
+    <div class="form-group">
+      <label for="make">Make:</label>
+      <input type="text" id="make" name="make" required>
+    </div>
+    <div class="form-group">
+      <label for="model">Model:</label>
+      <input type="text" id="model" name="model" required>
+    </div>
+    <div class="form-group">
+      <label for="color">Color:</label>
+      <input type="text" id="color" name="color" required>
+    </div>
+    <button type="submit" class="btn" style="background-color: #2ecc71;">+ Add Car</button>
+  </form>
+</div>
+
+</body>
+</html>

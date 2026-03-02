@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dealership Created Successfully</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+      background-color: #f8f9fa;
+      color: #333;
+    }
+    .success-container {
+      background-color: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      max-width: 500px;
+      border-left: 5px solid #2ecc71; /* Green success accent */
+    }
+    h1 {
+      color: #27ae60;
+      margin-top: 0;
+    }
+    .dealer-details {
+      margin: 1.5rem 0;
+      line-height: 1.6;
+      font-size: 1.1rem;
+    }
+    .label {
+      font-weight: bold;
+      color: #555;
+      display: inline-block;
+      width: 120px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 10px 15px;
+      background-color: #3498db;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      margin-top: 1rem;
+      border: none;
+    }
+    .btn:hover {
+      background-color: #2980b9;
+    }
+    .btn-secondary {
+      background-color: #95a5a6;
+      margin-left: 10px;
+    }
+    .btn-secondary:hover {
+      background-color: #7f8c8d;
+    }
+  </style>
+</head>
+<body>
+
+<div class="success-container">
+  <h1>Success!</h1>
+  <p>Your new dealership has been registered in the system.</p>
+
+  <div class="dealer-details">
+    <div><span class="label">ID:</span> <span th:text="${newDealership.dealershipId}">10</span></div>
+    <div><span class="label">Name:</span> <span th:text="${newDealership.name}">Bob's Autos</span></div>
+    <div><span class="label">Location:</span> <span th:text="${newDealership.location}">Chicago, IL</span></div>
+    <div><span class="label">Manufacturer:</span>
+      <span th:text="${newDealership.manufacturerName != null ? newDealership.manufacturerName : 'Independent (None assigned)'}">Ford</span>
+    </div>
+  </div>
+
+  <a href="/api/dealerships/all" class="btn">View All Dealerships</a>
+  <a href="/" class="btn btn-secondary">Back to Dashboard</a>
+</div>
+
+</body>
+</html>

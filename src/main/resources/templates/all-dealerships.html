@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Dealerships</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+      background-color: #f8f9fa;
+      color: #333;
+    }
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+    h1 {
+      color: #2c3e50;
+      margin: 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #fff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+    }
+    th {
+      background-color: #34495e;
+      color: white;
+    }
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+    tr:hover {
+      background-color: #e2e2e2;
+    }
+    .btn {
+      display: inline-block;
+      padding: 8px 12px;
+      background-color: #3498db;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      border: none;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background-color: #2980b9;
+    }
+    .btn-danger {
+      background-color: #e74c3c;
+    }
+    .btn-danger:hover {
+      background-color: #c0392b;
+    }
+    .empty-message {
+      background-color: #fff;
+      padding: 2rem;
+      text-align: center;
+      color: #7f8c8d;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+
+<div class="header-container">
+  <h1>Registered Dealerships</h1>
+  <a href="/" class="btn">Back to Dashboard</a>
+</div>
+
+<div th:if="${#lists.isEmpty(dealerships)}" class="empty-message">
+  <h2>No dealerships found.</h2>
+  <p>Return to the dashboard to add a new dealership.</p>
+</div>
+
+<table th:unless="${#lists.isEmpty(dealerships)}">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Dealership Name</th>
+    <th>Location</th>
+    <th>Manufacturer</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="dealer : ${dealerships}">
+    <td th:text="${dealer.dealershipId}">1</td>
+    <td th:text="${dealer.name}">Bob's Autos</td>
+    <td th:text="${dealer.location}">Chicago, IL</td>
+    <td th:text="${dealer.manufacturerName != null ? dealer.manufacturerName : 'Independent'}">Ford</td>
+
+    <td style="display: flex; gap: 10px;">
+      <a th:href="@{/api/dealerships/{id}(id=${dealer.dealershipId})}" class="btn" style="background-color: #2ecc71;">
+        Manage Inventory
+      </a>
+
+      <form th:action="@{/api/dealerships/{id}/delete(id=${dealer.dealershipId})}" method="POST" style="margin: 0;">
+        <button type="submit" class="btn btn-danger" onclick="return confirm('Delete this dealership and all its cars?');">
+          Delete
+        </button>
+      </form>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+</body>
+</html>

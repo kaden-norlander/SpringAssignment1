@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Car Details</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+      background-color: #f8f9fa;
+      color: #333;
+    }
+    .details-card {
+      background-color: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      max-width: 500px;
+      border-top: 5px solid #34495e;
+      margin-bottom: 2rem;
+    }
+    h1 {
+      color: #2c3e50;
+      margin-top: 0;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 10px;
+    }
+    .detail-row {
+      margin: 1rem 0;
+      font-size: 1.1rem;
+    }
+    .label {
+      font-weight: bold;
+      color: #7f8c8d;
+      display: inline-block;
+      width: 100px;
+    }
+    .value {
+      color: #2c3e50;
+      font-weight: bold;
+    }
+    .actions {
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid #eee;
+      display: flex;
+      gap: 10px; /* Spaces out the buttons */
+    }
+    .btn {
+      display: inline-block;
+      padding: 10px 15px;
+      background-color: #95a5a6;
+      color: white;
+      text-decoration: none;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    .btn:hover {
+      background-color: #7f8c8d;
+    }
+    .btn-primary {
+      background-color: #3498db;
+    }
+    .btn-primary:hover {
+      background-color: #2980b9;
+    }
+    .btn-danger {
+      background-color: #e74c3c;
+    }
+    .btn-danger:hover {
+      background-color: #c0392b;
+    }
+
+    /* Styles for the Update Form Section */
+    .update-section {
+      background-color: #fff;
+      padding: 1.5rem 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      max-width: 500px;
+      border-top: 5px solid #f39c12; /* Orange for edit */
+    }
+    .update-section h2 {
+      margin-top: 0;
+      color: #e67e22;
+      font-size: 1.3rem;
+    }
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: .5rem;
+      font-weight: bold;
+      color: #555;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+
+<div class="details-card">
+  <h1><span th:text="${car.make}">Toyota</span> <span th:text="${car.model}">Camry</span></h1>
+
+  <div class="detail-row">
+    <span class="label">VIN ID:</span>
+    <span class="value" th:text="${car.vinid}">123456789</span>
+  </div>
+
+  <div class="detail-row">
+    <span class="label">Make:</span>
+    <span class="value" th:text="${car.make}">Toyota</span>
+  </div>
+
+  <div class="detail-row">
+    <span class="label">Model:</span>
+    <span class="value" th:text="${car.model}">4Runner</span>
+  </div>
+
+  <div class="detail-row">
+    <span class="label">Color:</span>
+    <span class="value" th:text="${car.color}">Charcoal Black</span>
+  </div>
+
+  <div class="actions">
+      <a href="/" class="btn">Back to All Home</a>
+
+      <form th:action="@{/api/cars/{id}/delete(id=${car.vinid})}" method="POST">
+        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to permanently delete this car?');">
+          Delete Car
+        </button>
+      </form>
+    </div>
+  </div>
+
+<div class="update-section">
+  <h2>Update Car Details</h2>
+  <form th:action="@{/api/cars/{id}/update(id=${car.vinid})}" method="POST">
+
+    <div class="form-group">
+      <label for="make">Make:</label>
+      <input type="text" id="make" name="make" th:value="${car.make}" required>
+    </div>
+
+    <div class="form-group">
+      <label for="model">Model:</label>
+      <input type="text" id="model" name="model" th:value="${car.model}" required>
+    </div>
+
+    <div class="form-group">
+      <label for="color">Color:</label>
+      <input type="text" id="color" name="color" th:value="${car.color}" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Updates</button>
+  </form>
+</div>
+
+</body>
+</html>

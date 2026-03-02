@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dealership Deleted</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+      background-color: #f8f9fa;
+      color: #333;
+    }
+    .confirmation-container {
+      background-color: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      max-width: 500px;
+      border-left: 5px solid #e74c3c; /* Red accent for deletion */
+    }
+    h1 {
+      color: #c0392b;
+      margin-top: 0;
+    }
+    .deleted-details {
+      margin: 1.5rem 0;
+      padding: 1rem;
+      background-color: #fdf2f1;
+      border-radius: 4px;
+      color: #555;
+      line-height: 1.6;
+    }
+    .btn {
+      display: inline-block;
+      padding: 10px 15px;
+      background-color: #3498db;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      margin-top: 1rem;
+    }
+    .btn:hover {
+      background-color: #2980b9;
+    }
+  </style>
+</head>
+<body>
+
+<div class="confirmation-container">
+  <h1>Dealership Removed</h1>
+  <p>The following dealership has been permanently removed from the system:</p>
+
+  <div class="deleted-details">
+    <strong>ID:</strong> <span th:text="${deletedDealership.dealershipId}">10</span><br>
+    <strong>Name:</strong> <span th:text="${deletedDealership.name}">Bob's Autos</span><br>
+    <strong>Location:</strong> <span th:text="${deletedDealership.location}">Chicago, IL</span><br>
+    <strong>Manufacturer:</strong>
+    <span th:text="${deletedDealership.manufacturerName != null ? deletedDealership.manufacturerName : 'Independent'}">Ford</span>
+  </div>
+
+  <a href="/api/dealerships/all" class="btn">Back to Dealership List</a>
+</div>
+
+</body>
+</html>

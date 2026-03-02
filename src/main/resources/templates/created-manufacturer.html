@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manufacturer Added</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+      background-color: #f8f9fa;
+      color: #333;
+    }
+    .success-container {
+      background-color: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      max-width: 500px;
+      border-left: 5px solid #2ecc71; /* Green success accent */
+    }
+    h1 {
+      color: #27ae60;
+      margin-top: 0;
+    }
+    .mfg-details {
+      margin: 1.5rem 0;
+      line-height: 1.6;
+      font-size: 1.1rem;
+    }
+    .label {
+      font-weight: bold;
+      color: #555;
+      display: inline-block;
+      width: 150px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 10px 15px;
+      background-color: #3498db;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      margin-top: 1rem;
+      border: none;
+    }
+    .btn:hover {
+      background-color: #2980b9;
+    }
+    .btn-secondary {
+      background-color: #95a5a6;
+      margin-left: 10px;
+    }
+    .btn-secondary:hover {
+      background-color: #7f8c8d;
+    }
+  </style>
+</head>
+<body>
+
+<div class="success-container">
+  <h1>Success!</h1>
+  <p>Your new manufacturer has been added to the database.</p>
+
+  <div class="mfg-details">
+    <div><span class="label">ID:</span> <span th:text="${newManufacturer.manufacturerId}">1</span></div>
+    <div><span class="label">Brand Name:</span> <span th:text="${newManufacturer.name}">Toyota</span></div>
+    <div><span class="label">Country of Origin:</span> <span th:text="${newManufacturer.countryOfOrigin}">Japan</span></div>
+  </div>
+
+  <a href="/api/manufacturers/all" class="btn">View All Manufacturers</a>
+  <a href="/" class="btn btn-secondary">Back to Dashboard</a>
+</div>
+
+</body>
+</html>
